@@ -1,0 +1,113 @@
+.category-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 8px 0;
+  align-self: flex-start;
+}
+
+.category-sidebar__section {
+  border-bottom: 1px solid var(--color-border);
+  padding: 4px 20px;
+}
+
+.category-sidebar__section:last-child {
+  border-bottom: none;
+}
+
+.category-sidebar__heading {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.category-sidebar__chevron {
+  display: flex;
+  color: var(--color-text-secondary);
+}
+
+.category-sidebar__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 14px;
+}
+
+.category-sidebar__list button {
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  color: var(--color-text-secondary);
+  transition: background 0.15s, color 0.15s;
+}
+
+.category-sidebar__list button:hover {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.category-sidebar__list button.is-active {
+  background: var(--color-green-deep);
+  color: var(--color-white);
+}
+
+.category-sidebar__list--checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 2px;
+  font-size: 13.5px;
+  color: var(--color-text-secondary);
+}
+
+.category-sidebar__sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 16px;
+}
+
+.category-sidebar__size {
+  width: 40px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.category-sidebar__size:hover {
+  border-color: var(--color-green-deep);
+  color: var(--color-green-deep);
+}
+
+@media (max-width: 1024px) {
+  .category-sidebar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .category-sidebar__heading {
+    font-size: 13.5px;
+  }
+
+  .category-sidebar__sizes {
+    gap: 6px;
+  }
+
+  .category-sidebar__size {
+    width: 36px;
+    height: 32px;
+  }
+}
