@@ -4,20 +4,23 @@ import { Calendar, MapPin, Truck, Users } from 'lucide-react';
 import Header from './components/Header/Header';
 import Navbar from './components/Navbar/Navbar';
 import ProductGrid from './components/ProductGrid/ProductGrid';
+import ProductDetail from './components/ProductDetail/ProductDetail';
 import CoverageMap from './components/CoverageMap/CoverageMap';
 import AboutSection from './components/AboutSection/AboutSection';
 import Footer from './components/Footer/Footer';
+import { products } from './data/products';
 import { useCountUp } from './hooks/useCountUp';
+import { useLanguage } from './context/useLanguage';
 import './App.css';
 
 const stats = [
-  { icon: Calendar, value: 15, suffix: '+', label: 'años de experiencia' },
-  { icon: Users, value: 1000, suffix: '+', label: 'empresas atendidas' },
-  { icon: MapPin, value: 20, suffix: '', label: 'departamentos con cobertura' },
-  { icon: Truck, value: 98, suffix: '%', label: 'pedidos entregados a tiempo' },
+  { icon: Calendar, value: 15, suffix: '+', label: 'stats.experience' },
+  { icon: Users, value: 1000, suffix: '+', label: 'stats.businesses' },
+  { icon: MapPin, value: 20, suffix: '', label: 'stats.coverage' },
+  { icon: Truck, value: 98, suffix: '%', label: 'stats.delivery' },
 ];
 
-function StatItem({ icon: Icon, value, suffix, label }) {
+function StatItem({ icon: Icon, value, suffix, label, translate }) {
   const ref = useRef(null);
   const count = useCountUp(ref, value);
 
@@ -31,26 +34,40 @@ function StatItem({ icon: Icon, value, suffix, label }) {
           {count}
           {suffix}
         </span>
-        <span className="trust-bar__label">{label}</span>
+        <span className="trust-bar__label">{translate(label)}</span>
       </div>
     </div>
   );
 }
 
 function App() {
+  const { t } = useLanguage();
+  const productId = new URLSearchParams(window.location.search).get('producto');
+
+  if (productId) {
+    const product = products.find((item) => item.id === productId);
+
+    return (
+      <>
+        <Header />
+        <Navbar />
+        <ProductDetail product={product} />
+        <AboutSection />
+        <Footer />
+      </>
+    );
+  }
+
   return (
     <>
       <Header />
       <Navbar />
 
       <section className="hero">
-        <h1>Dotación, seguridad y vestuario para tu empresa</h1>
-        <p>
-          Productos de protección, ropa de trabajo, prendas deportivas y
-          personalización textil.
-        </p>
+        <h1>{t('hero.title')}</h1>
+        <p>{t('hero.description')}</p>
         <a href="#catalogo" className="hero__cta">
-          Ver catálogo
+          {t('hero.cta')}
         </a>
       </section>
 
@@ -62,7 +79,7 @@ function App() {
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
       >
         {stats.map((stat) => (
-          <StatItem key={stat.label} {...stat} />
+          <StatItem key={stat.label} {...stat} translate={t} />
         ))}
       </motion.section>
 

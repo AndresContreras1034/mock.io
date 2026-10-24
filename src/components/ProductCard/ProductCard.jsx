@@ -1,23 +1,21 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { useLanguage } from '../../context/useLanguage';
 import './ProductCard.css';
 
-const categoryLabels = {
-  seguridad: 'Seguridad industrial',
-  trabajo: 'Ropa de trabajo',
-  deportiva: 'Ropa deportiva',
-  personalizacion: 'Personalización',
+const categoryTranslations = {
+  cascos: 'category.helmets',
+  chaquetas: 'category.jackets',
+  chalecos: 'category.vests',
+  camisetas: 'category.shirts',
+  gorros: 'category.hats',
+  guantes: 'category.gloves',
 };
 
-function formatPrice(value) {
-  return value.toLocaleString('es-CO', {
-    style: 'currency',
-    currency: 'COP',
-    maximumFractionDigits: 0,
-  });
-}
-
 function ProductCard({ product }) {
+  const { language, t } = useLanguage();
+  const productName = language === 'EN' ? product.nameEn : product.name;
+
   return (
     <motion.article
       className="product-card"
@@ -28,7 +26,7 @@ function ProductCard({ product }) {
       <div className="product-card__image-wrap">
         <motion.img
           src={product.image}
-          alt={product.name}
+          alt={productName}
           className="product-card__image"
           whileHover={{ scale: 1.06 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
@@ -46,19 +44,23 @@ function ProductCard({ product }) {
       </div>
 
       <div className="product-card__body">
-        <span className="product-card__category">{categoryLabels[product.category]}</span>
-        <h3 className="product-card__name">{product.name}</h3>
-        <span className="product-card__price">{formatPrice(product.price)}</span>
+        <span className="product-card__category">
+          {t(categoryTranslations[product.category])}
+        </span>
+        <h3 className="product-card__name">{productName}</h3>
       </div>
 
-      <motion.button
-        type="button"
+      <motion.a
+        href={`?producto=${encodeURIComponent(product.id)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${t('product.view')}: ${productName}`}
         className="product-card__cta"
         whileHover={{ gap: '10px' }}
       >
-        Ver producto
+        {t('product.view')}
         <ArrowRight size={16} />
-      </motion.button>
+      </motion.a>
     </motion.article>
   );
 }

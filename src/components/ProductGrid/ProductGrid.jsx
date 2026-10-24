@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import CategorySidebar from '../CategorySidebar/CategorySidebar';
 import ProductCard from '../ProductCard/ProductCard';
-import { products } from '../../data/products';
+import { categories, products } from '../../data/products';
+import { useLanguage } from '../../context/useLanguage';
 import './ProductGrid.css';
 
 const containerVariants = {
@@ -19,42 +20,69 @@ const itemVariants = {
 
 function ProductGrid() {
   const [activeCategory, setActiveCategory] = useState(null);
+  const { t } = useLanguage();
 
   const filteredProducts = useMemo(() => {
-    if (!activeCategory) return products;
-    return products.filter((product) => product.category === activeCategory);
+    if (activeCategory) {
+      return products.filter((product) => product.category === activeCategory);
+    }
+
+    const productsByCategory = categories.map((category) =>
+      products.filter((product) => product.category === category.id),
+    );
+    const rounds = Math.max(...productsByCategory.map((items) => items.length));
+
+    return Array.from({ length: rounds }, (_, index) =>
+      productsByCategory.flatMap((items) => (items[index] ? [items[index]] : [])),
+    ).flat();
   }, [activeCategory]);
+
+  const categoryCounts = useMemo(
+    () =>
+      Object.fromEntries(
+        categories.map((category) => [
+          category.id,
+          products.filter((product) => product.category === category.id).length,
+        ]),
+      ),
+    [],
+  );
 
   return (
     <section className="product-grid" id="catalogo">
       <div className="product-grid__header">
-        <h2>Catálogo</h2>
-        <p>{filteredProducts.length} productos disponibles</p>
+        <div>
+          <h2>{t('catalog.title')}</h2>
+          <p>{t('catalog.description')}</p>
+        </div>
+        <span className="product-grid__count">
+          {filteredProducts.length} {t('catalog.products')}
+        </span>
       </div>
 
-      <div className="product-grid__layout">
-        <CategorySidebar
-          activeCategory={activeCategory}
-          onCategoryChange={setActiveCategory}
-        />
+      <CategorySidebar
+        activeCategory={activeCategory}
+        categoryCounts={categoryCounts}
+        onCategoryChange={setActiveCategory}
+        translate={t}
+      />
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeCategory ?? 'todas'}
-            className="product-grid__items"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            exit={{ opacity: 0 }}
-          >
-            {filteredProducts.map((product) => (
-              <motion.div key={product.id} variants={itemVariants}>
-                <ProductCard product={product} />
-              </motion.div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeCategory ?? 'todas'}
+          className="product-grid__items"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          exit={{ opacity: 0 }}
+        >
+          {filteredProducts.map((product) => (
+            <motion.div key={product.id} variants={itemVariants}>
+              <ProductCard product={product} />
+            </motion.div>
+          ))}
+        </motion.div>
+      </AnimatePresence>
     </section>
   );
 }

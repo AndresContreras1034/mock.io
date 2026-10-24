@@ -10,11 +10,13 @@ import {
   Mail,
 } from 'lucide-react';
 import { useScrolled } from '../../hooks/useScrolled';
+import { useLanguage } from '../../context/useLanguage';
 import './Header.css';
 
 function Header() {
   const [query, setQuery] = useState('');
   const scrolled = useScrolled(40);
+  const { t } = useLanguage();
 
   return (
     <header className={`header ${scrolled ? 'header--scrolled' : ''}`}>
@@ -23,17 +25,17 @@ function Header() {
           <ul className="header__topbar-links">
             <li>
               <Truck size={14} />
-              Envíos a todo Estados Unidos
+              {t('header.shipping')}
             </li>
 
             <li>
               <Headset size={14} />
-              Atención al cliente
+              {t('header.support')}
             </li>
 
             <li>
               <Users size={14} />
-              Distribuidores
+              {t('header.distributors')}
             </li>
           </ul>
 
@@ -59,7 +61,7 @@ function Header() {
           ease: [0.16, 1, 0.3, 1],
         }}
       >
-        <a href="/" className="header__logo">
+        <a href={import.meta.env.BASE_URL} className="header__logo">
           J&R <span>Safety Wear</span>
         </a>
 
@@ -75,7 +77,7 @@ function Header() {
 
           <input
             type="text"
-            placeholder="Search boots, helmets, uniforms..."
+            placeholder={t('header.search')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -87,7 +89,7 @@ function Header() {
 
             <span className="header__phone-text">
               <span className="header__phone-label">
-                Sales
+                {t('header.sales')}
               </span>
 
               <span className="header__phone-number">

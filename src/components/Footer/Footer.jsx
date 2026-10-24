@@ -4,16 +4,13 @@ import {
   MapPin,
   Phone,
 } from 'lucide-react';
+import { categories } from '../../data/products';
+import { useLanguage } from '../../context/useLanguage';
 import './Footer.css';
 
-const categories = [
-  'Seguridad industrial',
-  'Ropa de trabajo',
-  'Ropa deportiva',
-  'Personalización',
-];
-
 function Footer() {
+  const { t } = useLanguage();
+
   return (
     <motion.footer
       className="footer"
@@ -32,26 +29,23 @@ function Footer() {
             J&R <span>Safety Wear</span>
           </span>
 
-          <p>
-            Seguridad industrial, ropa de trabajo y vestuario para empresas
-            y organizaciones.
-          </p>
+          <p>{t('footer.description')}</p>
         </div>
 
         <div className="footer__column">
-          <h4>Categorías</h4>
+          <h4>{t('footer.categories')}</h4>
 
           <ul>
             {categories.map((category) => (
-              <li key={category}>
-                <a href="#catalogo">{category}</a>
+              <li key={category.id}>
+                <a href="#catalogo">{t(category.translationKey)}</a>
               </li>
             ))}
           </ul>
         </div>
 
         <div className="footer__column">
-          <h4>Contacto</h4>
+          <h4>{t('footer.contact')}</h4>
 
           <ul>
             <li>
@@ -74,7 +68,7 @@ function Footer() {
         </div>
 
         <div className="footer__column">
-          <h4>Ubicaciones</h4>
+          <h4>{t('footer.locations')}</h4>
 
           <ul>
             <li>
@@ -106,12 +100,12 @@ function Footer() {
 
       <div className="footer__bottom">
         <span>
-          © 2026 J&R Safety Wear LLC. Todos los derechos reservados.
+          © 2026 J&R Safety Wear LLC. {t('footer.rights')}
         </span>
 
         <div className="footer__legal">
-          <a href="#">Términos y condiciones</a>
-          <a href="#">Política de privacidad</a>
+          <a href="#">{t('footer.terms')}</a>
+          <a href="#">{t('footer.privacy')}</a>
         </div>
       </div>
     </motion.footer>

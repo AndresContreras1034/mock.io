@@ -1,17 +1,14 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, X, ChevronDown, Check } from 'lucide-react';
-import languages from '../../assets/languages.png';
+import { Menu, X, ChevronDown, Check, Languages } from 'lucide-react';
+import { useLanguage } from '../../context/useLanguage';
 import './Navbar.css';
 
 const links = [
-  { label: 'Catálogo', href: '#catalogo' },
-  { label: 'Seguridad industrial', href: '#seguridad' },
-  { label: 'Ropa de trabajo', href: '#trabajo' },
-  { label: 'Ropa deportiva', href: '#deportiva' },
-  { label: 'Personalización', href: '#personalizacion' },
-  { label: 'Nosotros', href: '#nosotros' },
-  { label: 'Contacto', href: '#contacto' },
+  { label: 'nav.catalog', href: '#catalogo' },
+  { label: 'nav.customization', href: '#personalizacion' },
+  { label: 'nav.about', href: '#nosotros' },
+  { label: 'nav.contact', href: '#contacto' },
 ];
 
 const languagesList = [
@@ -19,9 +16,9 @@ const languagesList = [
   { code: 'EN', label: 'English' },
 ];
 
-function LanguageSwitcher({ variant = 'desktop' }) {
+export function LanguageSwitcher({ variant = 'desktop' }) {
   const [langOpen, setLangOpen] = useState(false);
-  const [language, setLanguage] = useState('ES');
+  const { language, setLanguage, t } = useLanguage();
 
   return (
     <div className={`navbar__lang navbar__lang--${variant}`}>
@@ -30,13 +27,9 @@ function LanguageSwitcher({ variant = 'desktop' }) {
         className="navbar__lang-btn"
         onClick={() => setLangOpen((value) => !value)}
         aria-expanded={langOpen}
-        aria-label="Cambiar idioma"
+        aria-label={t('language.change')}
       >
-        <img
-          src={languages}
-          alt=""
-          className="navbar__lang-icon"
-        />
+        <Languages size={18} className="navbar__lang-icon" aria-hidden="true" />
 
         <span>{language}</span>
 
@@ -88,6 +81,10 @@ function LanguageSwitcher({ variant = 'desktop' }) {
 
 function Navbar() {
   const [open, setOpen] = useState(false);
+  const { t } = useLanguage();
+  const isProductPage = new URLSearchParams(window.location.search).has('producto');
+  const getLinkHref = (href) =>
+    isProductPage ? `${window.location.pathname}${href}` : href;
 
   return (
     <nav className="navbar">
@@ -96,7 +93,7 @@ function Navbar() {
           type="button"
           className="navbar__toggle"
           onClick={() => setOpen((value) => !value)}
-          aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
+          aria-label={open ? t('menu.close') : t('menu.open')}
           aria-expanded={open}
         >
           {open ? <X size={22} /> : <Menu size={22} />}
@@ -105,7 +102,7 @@ function Navbar() {
         <ul className="navbar__links navbar__links--desktop">
           {links.map((link) => (
             <li key={link.label}>
-              <a href={link.href}>{link.label}</a>
+              <a href={getLinkHref(link.href)}>{t(link.label)}</a>
             </li>
           ))}
         </ul>
@@ -144,10 +141,10 @@ function Navbar() {
                   transition={{ delay: 0.05 + i * 0.04 }}
                 >
                   <a
-                    href={link.href}
+                    href={getLinkHref(link.href)}
                     onClick={() => setOpen(false)}
                   >
-                    {link.label}
+                    {t(link.label)}
                   </a>
                 </motion.li>
               ))}

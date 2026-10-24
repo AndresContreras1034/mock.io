@@ -1,4 +1,5 @@
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
+import { useLanguage } from '../../context/useLanguage';
 import './CoverageMap.css';
 
 // Topojson público de los estados de EE. UU.
@@ -10,25 +11,23 @@ const COVERED_STATES = [
 ];
 
 function CoverageMap() {
+  const { t } = useLanguage();
+
   return (
     <section className="coverage-map">
       <div className="coverage-map__intro">
-        <h2>Nuestra ubicación</h2>
-
-        <p>
-          J&R Safety Wear LLC está ubicada en Aurora, Colorado, donde
-          ofrecemos productos de seguridad industrial y ropa de trabajo.
-        </p>
+        <h2>{t('coverage.title')}</h2>
+        <p>{t('coverage.description')}</p>
 
         <ul className="coverage-map__legend">
           <li>
             <span className="coverage-map__dot coverage-map__dot--active" />
-            Ubicación principal
+            {t('coverage.main')}
           </li>
 
           <li>
             <span className="coverage-map__dot" />
-            Sin información de cobertura
+            {t('coverage.unknown')}
           </li>
         </ul>
       </div>

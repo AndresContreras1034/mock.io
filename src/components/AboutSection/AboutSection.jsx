@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion';
 import { Award, HeartHandshake, MapPin, ShieldCheck, Users2 } from 'lucide-react';
+import { useLanguage } from '../../context/useLanguage';
 import './AboutSection.css';
 
 const values = [
-  { icon: ShieldCheck, label: 'Quality' },
-  { icon: HeartHandshake, label: 'Commitment' },
-  { icon: Award, label: 'Trust' },
-  { icon: Users2, label: 'Service' },
+  { icon: ShieldCheck, label: 'about.quality' },
+  { icon: HeartHandshake, label: 'about.commitment' },
+  { icon: Award, label: 'about.trust' },
+  { icon: Users2, label: 'about.service' },
 ];
 
 const locations = [
@@ -28,6 +29,8 @@ const fadeUp = {
 };
 
 function AboutSection() {
+  const { t } = useLanguage();
+
   return (
     <section className="about" id="nosotros">
       <motion.div
@@ -37,14 +40,8 @@ function AboutSection() {
         viewport={{ once: true, margin: '-100px' }}
         variants={fadeUp}
       >
-        <h2>About J&R Safety Wear</h2>
-
-        <p>
-          J&R Safety Wear LLC provides safety wear and work clothing
-          for customers in Aurora, Colorado. Our business is located
-          at La Plaza Colorado and also has a location at Mile High
-          Flea Market.
-        </p>
+        <h2>{t('about.title')}</h2>
+        <p>{t('about.description')}</p>
       </motion.div>
 
       <motion.div
@@ -61,7 +58,7 @@ function AboutSection() {
             variants={fadeUp}
           >
             <Icon size={22} />
-            <span>{label}</span>
+            <span>{t(label)}</span>
           </motion.div>
         ))}
       </motion.div>
@@ -73,7 +70,7 @@ function AboutSection() {
         viewport={{ once: true, margin: '-60px' }}
         variants={fadeUp}
       >
-        <h3>Our Locations</h3>
+        <h3>{t('about.locations')}</h3>
 
         <ul>
           {locations.map((location) => (
